@@ -7,7 +7,7 @@ function App() {
  const [viewport, setViewport] = useState({
    latitude: 45.4211,
    longitude: -75.6903,
-  
+   position: "absolute",
    width: "100vw",
    height: "100vh",
    zoom: 5
@@ -16,6 +16,7 @@ function App() {
 <div className="App">
   <ReactMapGL {...viewport}
   mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+  mapStyle="mapbox://styles/exxempt/cl3klweqn001m14p0qfc9jpcr"
   onViewportChange={(viewport) => {
     setViewport(viewport);
   }}
