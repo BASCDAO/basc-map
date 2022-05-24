@@ -5,12 +5,12 @@ import './App.css';
 
 function App() {
  const [viewport, setViewport] = useState({
-   latitude: 45.4211,
-   longitude: -75.6903,
+   latitude: 8.950357,
+   longitude: -20.604661,
    position: "absolute",
    width: "100vw",
    height: "100vh",
-   zoom: 5
+   zoom: 2.23
  });
  return (
 <div>
