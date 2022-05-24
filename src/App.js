@@ -11,7 +11,9 @@ function App() {
  });
  return (
 <div className="App">
-  <ReactMapGL {...viewport}>markers here</ReactMapGL>
+  <ReactMapGL {...viewport}
+  mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+  >markers here</ReactMapGL>
 </div>
  );
 
