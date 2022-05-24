@@ -13,7 +13,7 @@ function App() {
    zoom: 5
  });
  return (
-<div className="App">
+<div>
   <ReactMapGL {...viewport}
   mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
   mapStyle="mapbox://styles/exxempt/cl3klweqn001m14p0qfc9jpcr"
