@@ -4,7 +4,7 @@ import useSWR from "swr";
 import { addDataLayer } from "../../map/addDataLayer";
 import { initializeMap } from "../../map/initializeMap";
 import {FormPin} from "../../components/FormButton";
-import { fetcher } from "../../utils/fetcher";
+//import { fetcher } from "../../utils/fetcher";
 import styles from "../../styles/Home.module.css";
 import useWalletNFTs, { NFT } from "../../hooks/useWalletNFTs";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -18,11 +18,20 @@ export const HomeView: FC = ({}) => {
   const [pageIsMounted, setPageIsMounted] = useState(false);
   const [Map, setMap] = useState();
 
+  const fetcher = async (
+    input: RequestInfo,
+    init: RequestInit,
+    ...args: any[]
+  ) => {
+    const res = await fetch(input, init);
+    return res.json();
+  };
+
   //const { data, error } = useSWR("/api/liveMusic", fetcher);
-  const fetcher2 = (...args) => fetch(...args).then((res) => res.json());
+  //const fetcher2 = (...args) => fetch(...args).then((res) => res.json());
   const { data, error } = useSWR(
     "https://bascmap-express-api.vercel.app/users",
-    fetcher2
+    fetcher
   );
 
   const allPoints = [];
