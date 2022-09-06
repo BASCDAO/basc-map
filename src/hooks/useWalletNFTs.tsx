@@ -1,8 +1,7 @@
 import { PublicKey } from "@solana/web3.js"
 import { programs } from "@metaplex/js"
 import { useCallback, useEffect, useState } from "react"
-//import { getNFTsByOwner } from "../utils/nfts"
-import { getNFTsByOwner } from "../utils/NFTget"
+import { getNFTsByOwner } from "../utils/nfts"
 import { useConnection, useWallet } from "@solana/wallet-adapter-react"
 
 export type NFT = {
