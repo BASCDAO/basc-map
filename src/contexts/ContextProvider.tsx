@@ -7,8 +7,8 @@ import {
     SolletExtensionWalletAdapter,
     SolletWalletAdapter,
     TorusWalletAdapter,
-    // LedgerWalletAdapter,
-    // SlopeWalletAdapter,
+    LedgerWalletAdapter,
+    SlopeWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 import { Cluster, clusterApiUrl } from '@solana/web3.js';
 import { FC, ReactNode, useCallback, useMemo } from 'react';
@@ -18,21 +18,28 @@ import { NetworkConfigurationProvider, useNetworkConfiguration } from './Network
 
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const { autoConnect } = useAutoConnect();
-    const { networkConfiguration } = useNetworkConfiguration();
-    const network = networkConfiguration as WalletAdapterNetwork;
-    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+    //const { networkConfiguration } = useNetworkConfiguration();
+  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
+  const network = process.env
+    .NEXT_PUBLIC_CONNECTION_NETWORK as WalletAdapterNetwork
 
-    console.log(network);
+  const endpoint =
+    process.env.NEXT_PUBLIC_CONNECTION_NETWORK == "devnet"
+      ? process.env.NEXT_PUBLIC_SOLANA_RPC_HOST_DEVNET
+      : process.env.NEXT_PUBLIC_SOLANA_RPC_HOST_MAINNET_BETA
 
+  // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
+  // Only the wallets you configure here will be compiled into your application, and only the dependencies
+  // of wallets that your users connect to will be loaded.
     const wallets = useMemo(
         () => [
             new PhantomWalletAdapter(),
-            new SolflareWalletAdapter(),
+            new SolflareWalletAdapter({ network}),
             new SolletWalletAdapter({ network }),
             new SolletExtensionWalletAdapter({ network }),
             new TorusWalletAdapter(),
-            // new LedgerWalletAdapter(),
-            // new SlopeWalletAdapter(),
+            new LedgerWalletAdapter(),
+            new SlopeWalletAdapter(),
         ],
         [network]
     );

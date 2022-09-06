@@ -2,12 +2,16 @@ import { FC } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useAutoConnect } from "../contexts/AutoConnectProvider";
-import NetworkSwitcher from "./NetworkSwitcher";
+import { useNetworkConfiguration } from '../contexts/NetworkConfigurationProvider';
+
+  
 
 export const AppBar: FC = (props) => {
   const { autoConnect, setAutoConnect } = useAutoConnect();
   const { publicKey, signMessage } = useWallet();
-  
+  const { networkConfiguration, setNetworkConfiguration } = useNetworkConfiguration();
+  setNetworkConfiguration("mainnet-beta")
+
   if (publicKey) {
     return (
 
