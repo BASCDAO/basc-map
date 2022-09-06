@@ -30,7 +30,7 @@ export const HomeView: FC = ({}) => {
   //const { data, error } = useSWR("/api/liveMusic", fetcher);
   //const fetcher2 = (...args) => fetch(...args).then((res) => res.json());
   const { data, error } = useSWR(
-    "https://bascmap-express-api.vercel.app/users",
+    process.env.NEXT_PUBLIC_API_KEY,
     fetcher
   );
 
@@ -84,8 +84,7 @@ export const HomeView: FC = ({}) => {
     }
   }
 
-  mapboxgl.accessToken =
-    "pk.eyJ1Ijoid2FubmFkYyIsImEiOiJjazBja2M1ZzYwM2lnM2dvM3o1bmF1dmV6In0.50nuNnApjrJYkMfR2AUpXA";
+  mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_PK;
 
   useEffect(() => {
     setPageIsMounted(true);
@@ -128,6 +127,7 @@ export const HomeView: FC = ({}) => {
 
   useEffect(() => {
     if (pageIsMounted && data) {
+
       Map.on("load", function () {
         Map.loadImage(
           "/apemarkerblk.png",
