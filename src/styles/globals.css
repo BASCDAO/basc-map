@@ -74,26 +74,3 @@ img.rounded-corners {
   z-index: 1;
   display: flex;
 }
-
-/*
-  justify-content: center;
-  transform: translate(-50%, -50%);
-
-#my-map {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-}
-*/
-/*
-<div class="image">
-  <div class="overlay">
-    <a href="{{ url('/image/'.$image->id.'/edit') }}">
-      <button type="button" class="edit-image-btn pull-left">
-          <img src="https://cdn.icon-icons.com/icons2/512/PNG/48/twitter-3_icon-icons.com_50735.png">
-       </button>
-    </a>
-  </div>
-  <img src="https://basc.s3.amazonaws.com/img/818.png" class="rounded-corners">
-</div>
-*/

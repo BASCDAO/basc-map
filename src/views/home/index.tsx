@@ -1,16 +1,13 @@
 import Head from "next/head";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useCallback } from "react";
 import useSWR from "swr";
 import { addDataLayer } from "../../map/addDataLayer";
 import { initializeMap } from "../../map/initializeMap";
 import {FormPin} from "../../components/FormButton";
-//import { fetcher } from "../../utils/fetcher";
-import styles from "../../styles/Home.module.css";
 import useWalletNFTs, { NFT } from "../../hooks/useWalletNFTs";
+import useStakedNFTs, { sNFT } from "../../hooks/useStakedNFTs";
 import { useWallet } from "@solana/wallet-adapter-react";
-import Link from "next/link";
 import "../../styles/Home.module.css";
-import { WalletDisconnectedError } from "@solana/wallet-adapter-base";
 
 const mapboxgl = require("mapbox-gl/dist/mapbox-gl.js");
 
@@ -27,8 +24,6 @@ export const HomeView: FC = ({}) => {
     return res.json();
   };
 
-  //const { data, error } = useSWR("/api/liveMusic", fetcher);
-  //const fetcher2 = (...args) => fetch(...args).then((res) => res.json());
   const { data, error } = useSWR(
     process.env.NEXT_PUBLIC_API_KEY,
     fetcher
@@ -72,19 +67,22 @@ export const HomeView: FC = ({}) => {
     }
   }
   console.log(allPoints);
+
   const { publicKey } = useWallet();
   const { walletNFTs } = useWalletNFTs();
+  const { stakedNFTs } = useStakedNFTs();
 
   if (publicKey) {
-    if (walletNFTs === null) {
+    if (walletNFTs === null && stakedNFTs === null) {
       console.log("No BASC");
     }
-    if (walletNFTs !== null) {
+    if (walletNFTs !== null || stakedNFTs !== null) {
       console.log(walletNFTs);
+      console.log(stakedNFTs);
     }
   }
-
-  mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_PK;
+//process.env.NEXT_PUBLIC_MAPBOX_PK
+  mapboxgl.accessToken = "pk.eyJ1Ijoid2FubmFkYyIsImEiOiJjazBja2M1ZzYwM2lnM2dvM3o1bmF1dmV6In0.50nuNnApjrJYkMfR2AUpXA";
 
   useEffect(() => {
     setPageIsMounted(true);
@@ -92,16 +90,12 @@ export const HomeView: FC = ({}) => {
     let map = new mapboxgl.Map({
       container: "my-map",
       style: "mapbox://styles/exxempt/cl3klweqn001m14p0qfc9jpcr",
-      //center: [-77.02, 38.887],
-      latitude: 8.950357,
-      longitude: -20.604661,
+      center: [-57.02, 38.887],
+      latitude: 33.950357,
+      longitude: -45.604661,
       position: "absolute",
       zoom: 2.22,
-      //pitch: 45,
-      /*maxBounds: [
-        [-77.875588, 38.50705], // SouthWest coordinates
-        [-76.15381, 39.548764], // NorthEast coordinates
-      ],*/
+      pitch: 20,
       maxZoom: 12,
       minZoom: 2.22,
     });
@@ -112,9 +106,9 @@ export const HomeView: FC = ({}) => {
     map.touchZoomRotate.disableRotation();
     initializeMap(mapboxgl, map);
     setMap(map);
-    /*
+ /*
     map.on('mousemove', (e) => {
-      document.getElementById('info').innerHTML =
+      document.getElementById('pin').innerHTML =
       // `e.point` is the x, y coordinates of the `mousemove` event
       // relative to the top-left corner of the map.
       //JSON.stringify(e.point) +
@@ -145,7 +139,7 @@ export const HomeView: FC = ({}) => {
     <div className="fixed flex-col h-full" >
       <Head>
         <title>BASC MAP</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
         <link
           href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"
           rel="stylesheet"
@@ -155,6 +149,9 @@ export const HomeView: FC = ({}) => {
         <pre id="info"></pre>
         <div id="my-map" style={{height: "100vh" , width: "100vw" }} />
         {walletNFTs !== null && walletNFTs.length > 0 &&
+        <FormPin/>
+        }
+        {stakedNFTs !== null && stakedNFTs.length > 0 &&
         <FormPin/>
         }
       </main>

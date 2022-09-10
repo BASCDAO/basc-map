@@ -15,7 +15,6 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
           <Head>
             <title>BASC MAP</title>
           </Head>
-
           <ContextProvider>
             <div className="flex flex-col h-screen">
               <Notifications />

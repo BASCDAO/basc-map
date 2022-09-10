@@ -5,7 +5,7 @@ export function initializeMap(mapboxgl, map) {
       });
       var clusterId = features[0].properties.cluster_id;
       map
-        .getSource("dcmusic.live")
+        .getSource("basc.users")
         .getClusterExpansionZoom(clusterId, function (err, zoom) {
           if (err) return;
           map.easeTo({
