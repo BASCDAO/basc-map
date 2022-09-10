@@ -5,8 +5,12 @@ import { notify } from "../utils/notifications";
 import Link from "next/link";
 import bs58 from "bs58";
 import axios from "axios";
+import useSWR from "swr";
 import citiesByCountries from "../utils/cities";
 import useWalletNFTs, { NFT } from "../hooks/useWalletNFTs";
+import useStakedNFTs, { sNFT } from "../hooks/useStakedNFTs";
+import { userInfo } from "os";
+import useUserSOLBalanceStore from "stores/useUserSOLBalanceStore";
 
 export const ShowForm: FC = () => {
   const { publicKey, signMessage } = useWallet();
@@ -22,6 +26,7 @@ export const ShowForm: FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [mintInfo, setMintInfo] = useState("");
+  const [records, setRecords] = useState([]);
 
   const onClick = useCallback(async () => {
     try {
@@ -66,37 +71,162 @@ export const ShowForm: FC = () => {
   } else {
   }
 
+  const fetcher = async (
+    input: RequestInfo,
+    init: RequestInit,
+    ...args: any[]
+  ) => {
+    const res = await fetch(input, init);
+    return res.json();
+  };
+
+  const { data, error } = useSWR(
+    process.env.NEXT_PUBLIC_API_KEY,
+    fetcher
+  );
+
+  const allUserPoints = [];
+
+  if (data) {
+    var size = data.length;
+    const initData = {
+      type: "All_Users",
+      features: [],
+    };
+    for (var j = 0; j < size; j++) {
+      var lat = parseFloat(data[j].country.latitude);
+      var lon = parseFloat(data[j].country.longitude);
+      var name1 = data[j].name;
+      var twit = data[j].twitter;
+      var disc = data[j].discord;
+      var pfp = data[j].pfp;
+
+      initData.features.push({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [lon, lat],
+        },
+        properties: {
+          cluster: false,
+          event_count: 1,
+          name: name1,
+          twitter: twit,
+          discord: disc,
+          pfp: pfp,
+        },
+      });
+      var check = allUserPoints.length;
+      if (check === 0) {
+        allUserPoints.push(initData);
+      }
+    }
+  }
+
+  if (allUserPoints.length > 0 &&  records.length < 1) {
+    setRecords(data)
+  }
+/*
+const indexes = [];
+
+for (let index = 0; index < data.length; index++) {
+  if (data[index].wallet === publicKey.toBase58()) {
+    indexes.push(data[index]._id);
+  }
+}
+
+console.log(indexes)
+
+for (let index = 0; index < indexes.length; index++) {
+  if (indexes[index]) {
+    axios.delete(`${process.env.NEXT_PUBLIC_API_KEY}/${indexes[index]}`)
+    .then((res) => {
+      setIsLoading(false);
+      //onClose();
+    })
+    .catch((err) => {
+      setIsLoading(false);
+      console.error(err);
+    });
+
+  }
+}
+*/
+
+
   if (!PK && publicKey) {
     setPK(publicKey.toBase58());
   } else {
   }
+
   const { walletNFTs } = useWalletNFTs();
+  const { stakedNFTs } = useStakedNFTs();
   const tempMints = [];
+
+  if (tempMints.length === 0) {
+    tempMints.push(selectPFPString)
+  }
+
   if (walletNFTs) {
     for (var i = 0; i < walletNFTs.length; i++) {
       tempMints.push(walletNFTs[i].externalMetadata.name);
     }
   }
+  if (stakedNFTs) {
+    for (var i = 0; i < stakedNFTs.length; i++) {
+      tempMints.push(stakedNFTs[i].externalMetadata.name);
+    }
+  }
 
-  if (walletNFTs) {
+  if (walletNFTs || stakedNFTs) {
     if (selectedPFP !== selectedPFPHistory) {
       let obj = walletNFTs.find((o, i) => {
         if (o.externalMetadata.name === selectedPFP) {
           setMintInfo(walletNFTs[i].externalMetadata.image);
           setSelectedPFPHistory(walletNFTs[i].externalMetadata.name);
         }
+      })
+      let objj = stakedNFTs.find((o, i) => {
+        if (o.externalMetadata.name === selectedPFP) {
+          setMintInfo(stakedNFTs[i].externalMetadata.image);
+          setSelectedPFPHistory(stakedNFTs[i].externalMetadata.name);
+        }
       });
     } else {
     }
   }
+
+  const validateRecords= async () => {
+
+    const checks = [];
+
+    for (let index = 0; index < records.length; index++) {
+      if (records[index].wallet === publicKey.toBase58()) {
+        checks.push(records[index]._id);
+      }
+      if (records[index].pfp === mintInfo) {
+        checks.push(records[index]._id);
+      }
+    }
+
+    if (checks) {
+      for (let index = 0; index < checks.length; index++) {
+        await axios
+        .delete(`${process.env.NEXT_PUBLIC_API_KEY}/${checks[index]}`)
+        .then((res) => {
+        })
+      }
+    }
+  };
+
   const validateForm = () => {
     const isURL = (userInput) => {
       return userInput.match(
         /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
       );
     };
-    if (!selectedPFP) {
-      setErrorMessage("Name cannot be empty");
+    if (selectedPFP === selectPFPString) {
+      setErrorMessage("PFP cannot be empty");
       return;
     }
     if (!name) {
@@ -160,9 +290,9 @@ export const ShowForm: FC = () => {
         console.log(countryCode);
       }
       countryCode.latitude =
-        countryCode.lat + (Math.floor(Math.random() * (10 - 1 + 1)) + 1) / 100;
+        countryCode.lat + (Math.floor(Math.random() * (10 - 1 + 1)) + 5) / 100;
       countryCode.longitude =
-        countryCode.lng + (Math.floor(Math.random() * (10 - 1 + 1)) + 1) / 100;
+        countryCode.lng + (Math.floor(Math.random() * (10 - 1 + 1)) + 5) / 100;
       //delete countryCode.lat;
       //delete countryCode.lng;
       countryCode.country = country;
@@ -192,33 +322,19 @@ export const ShowForm: FC = () => {
           publicKey: bs58.encode(publicKey.toBytes()),
         },
       };
-      /*
-      const userDetails = {
-        wallet: publicKey.toString(),
-        name,
-        twitter,
-        discord,
-        country: countryCode,
-        tokens: walletNFTs,
-        signatureMessage: {
-          message: bs58.encode(message),
-          encodedSignature: bs58.encode(signature),
-          publicKey: bs58.encode(publicKey.toBytes()),
-        }
-      };
-      */
-      setIsLoading(true);
-      //https://bascmap-express-api.vercel.app/users 
-      //http://localhost:3001/users
 
-      console.log(userDetails);
+      setIsLoading(true);
+
+      await validateRecords();
+
       await axios
         .post(process.env.NEXT_PUBLIC_API_KEY, {
           ...userDetails,
         })
         .then((res) => {
           setIsLoading(false);
-          //onClose();
+          //temp reload to refresh added map point
+          window.location.reload();
         })
         .catch((err) => {
           setIsLoading(false);
@@ -341,6 +457,7 @@ export const ShowForm: FC = () => {
             </div>
             <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-400">I agree with the <a href="#" className="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a>.</label>
         </div>*/}
+      <Link href="/">
       <button
         type="button"
         className="group w-60 m-2 btn animate-pulse disabled:animate-none bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
@@ -348,12 +465,13 @@ export const ShowForm: FC = () => {
       >
         Submit
       </button>
+      </Link>
       <Link href="/">
       <button
         type="button"
         className="group w-60 m-2 btn animate-pulse disabled:animate-none bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
         
-        onClick={requestSignMessage}
+        //onClick={}
       >
         Cancel
       </button>

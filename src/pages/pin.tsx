@@ -1,20 +1,20 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { BasicsView } from "../views";
+import { PinView } from "../views";
 
-const Basics: NextPage = (props) => {
+const Pin: NextPage = (props) => {
   return (
     <div>
       <Head>
-        <title>Create Marker</title>
+        <title>Create Pin</title>
         <meta
           name="description"
           content="Create marker for BASC holders"
         />
       </Head>
-      <BasicsView />
+      <PinView />
     </div>
   );
 };
 
-export default Basics;
+export default Pin;

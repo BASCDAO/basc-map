@@ -2,7 +2,6 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import axios from 'axios';
 import { programs } from '@metaplex/js';
-// @ts-ignore: Unreachable code error
 import { mints } from './mints.js';
 
 const {
@@ -38,7 +37,6 @@ async function getNFTMetadata(
   conn: Connection,
   pubkey?: string
 ): Promise<INFT | undefined> {
-  // console.log('Pulling metadata for:', mint);
   try {
     const metadataPDA = await Metadata.getPDA(mint);
     const onchainMetadata = (await Metadata.load(conn, metadataPDA)).data;
@@ -61,7 +59,6 @@ export async function getNFTMetadataForMany(
   const promises: Promise<INFT | undefined>[] = [];
   tokens.forEach((t) => promises.push(getNFTMetadata(t.mint, conn, t.pubkey)));
   let nfts = (await Promise.all(promises)).filter((n) => !!n);
-  //console.log(`found ${nfts.length} metadatas`);
   return nfts;
 }
 

@@ -1,6 +1,6 @@
 export function addDataLayer(map, data) {
-  if (!map.getSource("dcmusic.live")) {
-    map.addSource("dcmusic.live", {
+  if (!map.getSource("basc.users")) {
+    map.addSource("basc.users", {
       type: "geojson",
       data: data,
       cluster: true,
@@ -11,13 +11,13 @@ export function addDataLayer(map, data) {
       },
     });
   } else {
-    map.getSource("dcmusic.live").setData(data);
+    map.getSource("basc.users").setData(data);
   }
 
   map.addLayer({
     id: "clusters",
     type: "circle",
-    source: "dcmusic.live",
+    source: "basc.users",
     filter: ["has", "point_count"],
     paint: {
       //"circle-color": "rgb(229, 36, 59)",
@@ -34,7 +34,7 @@ export function addDataLayer(map, data) {
   map.addLayer({
     id: "cluster-count",
     type: "symbol",
-    source: "dcmusic.live",
+    source: "basc.users",
     filter: ["has", "point_count"],
     layout: {
       "text-field": "{sum}",
@@ -50,7 +50,7 @@ export function addDataLayer(map, data) {
   map.addLayer({
     id: "unclustered-point",
     type: "circle",
-    source: "dcmusic.live",
+    source: "basc.users",
     filter: ["!", ["has", "point_count"]],
     paint: {
       //"circle-radius": ["step", ["get", "event_count"], 20, 100, 30, 750, 40],
@@ -67,7 +67,7 @@ export function addDataLayer(map, data) {
   map.addLayer({
     id: "event-count",
     type: "symbol",
-    source: "dcmusic.live",
+    source: "basc.users",
     filter: ["!", ["has", "point_count"]],
     layout: {
       'icon-image': 'custom-marker',

@@ -6,10 +6,11 @@ export const FormPin: FC = () => {
   const { publicKey, signMessage } = useWallet();
 
   return (
-    <Link href="/basics">
+    <Link href="/pin">
       <div>
           <button
               className="btn btn-ghost btn-md rounded-btn mgl-map-overlay ... "
+              id="pin"
               title="New pin!"
               hidden={!publicKey} disabled={!publicKey} 
           >

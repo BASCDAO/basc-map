@@ -24,6 +24,11 @@ export const ContentContainer: FC = props => {
             </Link>
           </li>
           <li>
+          <Link href="https://www.basc.app" passHref>
+              <a target="_blank" rel="noopener noreferrer" >Rarity</a>
+            </Link>
+          </li>
+          <li>
           <Link href="https://docs.bascdao.net/" passHref>
               <a target="_blank" rel="noopener noreferrer" >Whitepaper</a>
             </Link>
@@ -49,6 +54,11 @@ export const ContentContainer: FC = props => {
           <li>
             <Link href="https://solanart.io/collections/basc?tab=items" passHref>
               <a target="_blank" rel="noopener noreferrer" >Solanart</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="https://grape.art/collection/boredapesolanaclub" passHref>
+              <a target="_blank" rel="noopener noreferrer" >Grape</a>
             </Link>
           </li>
         </ul>

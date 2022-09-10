@@ -4,8 +4,6 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useAutoConnect } from "../contexts/AutoConnectProvider";
 import { useNetworkConfiguration } from '../contexts/NetworkConfigurationProvider';
 
-  
-
 export const AppBar: FC = (props) => {
   const { autoConnect, setAutoConnect } = useAutoConnect();
   const { publicKey, signMessage } = useWallet();

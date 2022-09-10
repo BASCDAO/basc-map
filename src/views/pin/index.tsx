@@ -1,10 +1,8 @@
 
 import { FC } from "react";
-import { SignMessage } from '../../components/SignMessage';
-import { SendTransaction } from '../../components/SendTransaction';
 import { ShowForm } from "../../components/Form";
 
-export const BasicsView: FC = ({ }) => {
+export const PinView: FC = ({ }) => {
 
   return (
 <div className="md:hero mx-auto p-4">
