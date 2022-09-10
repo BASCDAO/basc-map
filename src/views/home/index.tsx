@@ -89,7 +89,8 @@ export const HomeView: FC = ({}) => {
 
     let map = new mapboxgl.Map({
       container: "my-map",
-      style: "mapbox://styles/exxempt/cl3klweqn001m14p0qfc9jpcr",
+      //style: "mapbox://styles/exxempt/cl3klweqn001m14p0qfc9jpcr", //Flat
+      style: "mapbox://styles/exxempt/cl7wi59ps000414rz79tmykhj", //Globe
       center: [-57.02, 38.887],
       latitude: 33.950357,
       longitude: -45.604661,
