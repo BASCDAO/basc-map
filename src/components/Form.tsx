@@ -126,33 +126,6 @@ export const ShowForm: FC = () => {
   if (allUserPoints.length > 0 &&  records.length < 1) {
     setRecords(data)
   }
-/*
-const indexes = [];
-
-for (let index = 0; index < data.length; index++) {
-  if (data[index].wallet === publicKey.toBase58()) {
-    indexes.push(data[index]._id);
-  }
-}
-
-console.log(indexes)
-
-for (let index = 0; index < indexes.length; index++) {
-  if (indexes[index]) {
-    axios.delete(`${process.env.NEXT_PUBLIC_API_KEY}/${indexes[index]}`)
-    .then((res) => {
-      setIsLoading(false);
-      //onClose();
-    })
-    .catch((err) => {
-      setIsLoading(false);
-      console.error(err);
-    });
-
-  }
-}
-*/
-
 
   if (!PK && publicKey) {
     setPK(publicKey.toBase58());
@@ -315,7 +288,7 @@ for (let index = 0; index < indexes.length; index++) {
         discord: discord,
         twitter: twitter,
         pfp: mintInfo,
-        tokens: [],
+        tokens: [records],
         signatureMessage: {
           message: bs58.encode(message),
           encodedSignature: bs58.encode(signature),
