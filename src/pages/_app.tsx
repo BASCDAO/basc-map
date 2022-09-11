@@ -13,7 +13,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
     return (
         <>
           <Head>
-            <title>BASC MAP</title>
+            <title>BASC MAP2</title>
           </Head>
           <ContextProvider>
             <div className="flex flex-col h-screen">

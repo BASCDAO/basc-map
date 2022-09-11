@@ -66,7 +66,6 @@ export const HomeView: FC = ({}) => {
       }
     }
   }
-  console.log(allPoints);
 
   const { publicKey } = useWallet();
   const { walletNFTs } = useWalletNFTs();
@@ -77,7 +76,9 @@ export const HomeView: FC = ({}) => {
       console.log("No BASC");
     }
     if (walletNFTs !== null || stakedNFTs !== null) {
+      console.log("Wallet Apes");
       console.log(walletNFTs);
+      console.log("Staked Apes:");
       console.log(stakedNFTs);
     }
   }
