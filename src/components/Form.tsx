@@ -288,7 +288,7 @@ export const ShowForm: FC = () => {
         discord: discord,
         twitter: twitter,
         pfp: mintInfo,
-        tokens: [records],
+        tokens: [tempMints],
         signatureMessage: {
           message: bs58.encode(message),
           encodedSignature: bs58.encode(signature),
