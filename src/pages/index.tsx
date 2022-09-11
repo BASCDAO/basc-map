@@ -10,7 +10,12 @@ const Home: NextPage = (props) => {
         <meta
           name="description"
           content="BASC MAP"
-        />
+          />
+<meta property='og:site_name' content='https://map.bascdao.net' />
+<meta property='og:url' content='https://map.bascdao.net' />
+<meta property='og:type' content='website' />
+<meta property='og:image' content='/thumbnail.png' />	
+
       </Head>
       <HomeView />
     </div>
